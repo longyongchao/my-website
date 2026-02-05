@@ -5,8 +5,10 @@
 {{ define "content" }}
 <!-- 全局背景层 -->
 <div class="global-bg-container">
-  <div class="global-bg-image"></div>
-  <div class="global-bg-overlay"></div>
+  <div class="global-bg-card">
+    <div class="bg-glow-border"></div>
+    <div class="global-bg-image"></div>
+  </div>
 </div>
 
 <section class="container page updates-page">
@@ -65,6 +67,11 @@
                   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.91-4.33-3.56zm2.95-8H5.08c.96-1.65 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
                 </a>
                 {{ end }}
+                {{ range .icons }}
+                <a href="{{ .url }}" class="link-btn custom" target="_blank" rel="noopener" title="{{ .title }}">
+                  <img src="https://api.iconify.design/{{ .icon }}.svg" alt="{{ .title }}" loading="lazy">
+                </a>
+                {{ end }}
               </div>
               {{ end }}
             </div>
@@ -95,10 +102,34 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
 
 .global-bg-container.active {
   opacity: 1;
+}
+
+/* 右侧背景卡片 - 装饰性设计 */
+.global-bg-card {
+  position: absolute;
+  right: 5%;
+  top: 5%;
+  width: 30%;
+  height: 90%;
+  border-radius: 24px 8px 24px 24px;
+  overflow: hidden;
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  transform: translateY(20px) scale(0.98);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.global-bg-container.active .global-bg-card {
+  transform: translateY(0) scale(1);
 }
 
 .global-bg-image {
@@ -106,32 +137,33 @@
   inset: 0;
   background-size: cover;
   background-position: center;
-  transform: scale(1.1);
-  transition: transform 6s ease-out;
+  transform: scale(1.05);
+  transition: transform 8s ease-out;
 }
 
 .global-bg-container.active .global-bg-image {
   transform: scale(1);
 }
 
-/* 全局背景暗角 */
-.global-bg-overlay {
+/* 左侧发光边框效果 */
+.bg-glow-border {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
     transparent 0%,
-    transparent 50%,
-    rgba(0, 0, 0, 0.4) 100%
+    var(--accent-color) 50%,
+    transparent 100%
   );
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  transition: backdrop-filter 0.6s ease;
+  opacity: 0;
+  transition: opacity 0.6s ease;
 }
 
-.global-bg-container.active .global-bg-overlay {
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+.global-bg-container.active .bg-glow-border {
+  opacity: 0.6;
 }
 
 /* ===== 亮色主题优化 ===== */
@@ -139,82 +171,6 @@
 .colorscheme-light .global-bg-image {
   filter: brightness(0.6) saturate(0.8);
   transition: transform 6s ease-out, filter 0.8s ease;
-}
-
-/* 亮色主题下添加更强的暗色遮罩 */
-.colorscheme-light .global-bg-overlay {
-  background:
-    /* 顶部暗色渐变，平滑过渡到白色背景 */
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.95) 0%,
-      rgba(255, 255, 255, 0.7) 15%,
-      rgba(255, 255, 255, 0.3) 35%,
-      transparent 60%
-    ),
-    /* 底部暗色渐变 */
-    linear-gradient(
-      to top,
-      rgba(255, 255, 255, 0.95) 0%,
-      rgba(255, 255, 255, 0.7) 15%,
-      rgba(255, 255, 255, 0.3) 35%,
-      transparent 60%
-    ),
-    /* 径向暗角 */
-    radial-gradient(
-      ellipse at center,
-      transparent 0%,
-      transparent 40%,
-      rgba(0, 0, 0, 0.3) 100%
-    );
-}
-
-/* 全局背景激活时，遮罩变柔和 */
-.colorscheme-light .global-bg-container.active .global-bg-overlay {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.85) 0%,
-      rgba(255, 255, 255, 0.4) 20%,
-      rgba(255, 255, 255, 0.1) 40%,
-      transparent 60%
-    ),
-    linear-gradient(
-      to top,
-      rgba(255, 255, 255, 0.85) 0%,
-      rgba(255, 255, 255, 0.4) 20%,
-      rgba(255, 255, 255, 0.1) 40%,
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse at center,
-      transparent 0%,
-      transparent 50%,
-      rgba(0, 0, 0, 0.25) 100%
-    );
-}
-
-/* 亮色主题下卡片样式优化 */
-.colorscheme-light .timeline-card.glass {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.08),
-    0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-/* 全局背景激活时，卡片变暗以突出背景 */
-.colorscheme-light .global-bg-container.active ~ .updates-page .timeline-card {
-  background: rgba(40, 40, 50, 0.75);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 20px 40px -10px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.colorscheme-light .global-bg-container.active ~ .updates-page .timeline-card:hover {
-  background: rgba(30, 30, 40, 0.85);
-  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* 亮色主题下默认的日期标签 */
@@ -397,26 +353,6 @@
   transition: all 0.3s ease;
 }
 
-.timeline-item:hover .date-badge {
-  background: linear-gradient(135deg,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.25) 0%,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.1) 100%);
-  border-color: rgba(var(--accent-rgb, 100, 150, 200), 0.4);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(var(--accent-rgb, 100, 150, 200), 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-
-.timeline-item:hover .date-badge::before {
-  height: 1.2rem;
-  background: linear-gradient(180deg,
-    var(--accent-color) 0%,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.6) 100%);
-  box-shadow: 0 0 8px rgba(var(--accent-rgb, 100, 150, 200), 0.6);
-}
-
 /* ===== 毛玻璃卡片样式 ===== */
 .timeline-card {
   position: relative;
@@ -508,11 +444,13 @@
   background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(30px) saturate(200%);
   -webkit-backdrop-filter: blur(30px) saturate(200%);
+  transform: translateX(-30px);
 }
 
 .global-bg-container.active ~ .updates-page .timeline-card:hover {
   background: rgba(0, 0, 0, 0.35);
   border-color: rgba(255, 255, 255, 0.4);
+  transform: translateX(-30px) translateY(-6px) scale(1.02);
 }
 
 /* 全局背景激活时日期标签样式 */
@@ -521,7 +459,6 @@
     rgba(255, 255, 255, 0.2) 0%,
     rgba(255, 255, 255, 0.1) 100%);
   border-color: rgba(255, 255, 255, 0.35);
-  color: #fff;
 }
 
 /* 卡片头部布局 */
@@ -547,24 +484,12 @@
   transition: all 0.3s ease;
 }
 
-.timeline-card:hover .timeline-title {
-  color: #fff;
-  text-shadow:
-    0 2px 20px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(0, 0, 0, 0.4);
-}
-
 .timeline-description {
   font-size: 1.6rem;
   line-height: 1.8;
   color: var(--fg-color-muted);
   margin-bottom: 1.2rem;
   transition: all 0.3s ease;
-}
-
-.timeline-card:hover .timeline-description {
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 /* 标签 */
@@ -583,13 +508,6 @@
   font-weight: 500;
   transition: all 0.3s ease;
   border: 1px solid transparent;
-}
-
-.timeline-card:hover .timeline-tags .tag {
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.95);
-  border-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(4px);
 }
 
 /* ===== 外部链接按钮 ===== */
@@ -662,6 +580,12 @@
 .link-btn.website:hover {
   color: #fff;
   background: rgba(16, 185, 129, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.link-btn.custom:hover {
+  color: #fff;
+  background: rgba(100, 100, 200, 0.8);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -792,13 +716,17 @@
 </style>
 
 <script>
-// 全局背景控制
+// 全局背景控制 - 支持多图轮播
 (function() {
   const bgContainer = document.querySelector('.global-bg-container');
-  const bgImage = document.querySelector('.global-bg-image');
+  const bgCard = document.querySelector('.global-bg-card');
+  const bgImage = document.querySelector('.global-bg-card .global-bg-image');
   const items = document.querySelectorAll('.timeline-item[data-images]');
   let currentItem = null;
+  let carouselInterval = null;
   let isHovering = false;
+  let currentImageIndex = 0;
+  let imagesList = [];
 
   // 预加载图片
   function preloadImage(url) {
@@ -810,11 +738,102 @@
     });
   }
 
-  // 设置背景图片
-  function setBackgroundImage(url) {
-    if (bgImage) {
-      bgImage.style.backgroundImage = `url(${url})`;
+  // 预加载所有图片
+  function preloadAllImages(images) {
+    return Promise.all(images.map(url => preloadImage(url)));
+  }
+
+  // 设置背景图片（滑动动画）
+  function setBackgroundImage(url, direction = 'next') {
+    if (!bgImage || !bgCard) return;
+
+    // 获取当前背景图片作为旧图层
+    const currentBg = bgImage.style.backgroundImage;
+
+    // 如果有当前背景，创建旧图层（向左滑出）
+    if (currentBg && currentBg !== 'url()' && currentBg !== `url("${url}")`) {
+      const oldBgLayer = document.createElement('div');
+      oldBgLayer.className = 'bg-slide-layer old';
+      oldBgLayer.style.cssText = `
+        position: absolute;
+        inset: 0;
+        background-image: ${currentBg};
+        background-size: ${bgImage.style.backgroundSize || 'cover'};
+        background-position: center;
+        background-repeat: no-repeat;
+        transform: translateX(0);
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1;
+      `;
+      bgCard.appendChild(oldBgLayer);
+
+      // 触发旧图层向左滑出
+      requestAnimationFrame(() => {
+        oldBgLayer.style.transform = 'translateX(-100%)';
+      });
+
+      // 动画结束后移除旧图层
+      setTimeout(() => {
+        oldBgLayer.remove();
+      }, 800);
     }
+
+    // 更新主背景（立即显示）
+    bgImage.style.backgroundImage = `url(${url})`;
+
+    // 创建新的背景层（从右侧进入的过渡效果）
+    const newBgLayer = document.createElement('div');
+    newBgLayer.className = 'bg-slide-layer new';
+    newBgLayer.style.cssText = `
+      position: absolute;
+      inset: 0;
+      background-image: url(${url});
+      background-size: ${bgImage.style.backgroundSize || 'cover'};
+      background-position: center;
+      background-repeat: no-repeat;
+      transform: translateX(100%);
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2;
+    `;
+    bgCard.appendChild(newBgLayer);
+
+    // 触发重绘后开始动画（从右滑入）
+    requestAnimationFrame(() => {
+      newBgLayer.style.transform = 'translateX(0)';
+    });
+
+    // 动画结束后清理
+    setTimeout(() => {
+      newBgLayer.remove();
+    }, 600);
+  }
+
+  // 开始轮播
+  function startCarousel(images, interval = 4000) {
+    if (images.length <= 1) return;
+
+    // 立即切换到第二张（如果有的话）
+    currentImageIndex = 0;
+
+    carouselInterval = setInterval(() => {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      const nextImage = images[currentImageIndex];
+      setBackgroundImage(nextImage, 'next');
+    }, interval);
+  }
+
+  // 停止轮播
+  function stopCarousel() {
+    if (carouselInterval) {
+      clearInterval(carouselInterval);
+      carouselInterval = null;
+    }
+    currentImageIndex = 0;
+    imagesList = [];
+
+    // 清理所有过渡层（直接移除，无淡出动画）
+    const layers = bgContainer.querySelectorAll('.bg-slide-layer');
+    layers.forEach(layer => layer.remove());
   }
 
   items.forEach(item => {
@@ -824,27 +843,38 @@
     if (!imagesAttr) return;
 
     const images = imagesAttr.split(',').map(s => s.trim()).filter(s => s);
-    const primaryImage = images[0];
 
     // 鼠标进入时间线项目
     item.addEventListener('mouseenter', () => {
       isHovering = true;
       currentItem = item;
+      imagesList = images;
 
-      preloadImage(primaryImage).then(() => {
-        if (isHovering && currentItem === item) {
-          setBackgroundImage(primaryImage);
-          bgContainer?.classList.add('active');
+      preloadAllImages(images).then(() => {
+        if (!isHovering || currentItem !== item) return;
 
-          if (imageFit === 'contain') {
-            bgImage.style.backgroundSize = 'contain';
-            bgImage.style.backgroundRepeat = 'no-repeat';
-            bgImage.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-          } else {
-            bgImage.style.backgroundSize = 'cover';
-            bgImage.style.backgroundRepeat = 'no-repeat';
-            bgImage.style.backgroundColor = 'transparent';
-          }
+        // 设置初始背景
+        bgImage.style.backgroundImage = `url(${images[0]})`;
+        bgContainer?.classList.add('active');
+
+        if (imageFit === 'contain') {
+          bgImage.style.backgroundSize = 'contain';
+          bgImage.style.backgroundRepeat = 'no-repeat';
+          bgImage.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+        } else {
+          bgImage.style.backgroundSize = 'cover';
+          bgImage.style.backgroundRepeat = 'no-repeat';
+          bgImage.style.backgroundColor = 'transparent';
+        }
+
+        // 如果有多张图片，启动轮播
+        if (images.length > 1) {
+          // 延迟后开始轮播，让用户先看第一张
+          setTimeout(() => {
+            if (isHovering && currentItem === item) {
+              startCarousel(images, 3500); // 3.5秒切换一次
+            }
+          }, 2000);
         }
       }).catch(() => {
         // 图片加载失败，静默处理
@@ -856,9 +886,18 @@
       isHovering = false;
       currentItem = null;
 
+      // 停止轮播
+      stopCarousel();
+
       setTimeout(() => {
         if (!isHovering) {
           bgContainer?.classList.remove('active');
+          // 重置背景
+          setTimeout(() => {
+            if (!isHovering) {
+              bgImage.style.backgroundImage = '';
+            }
+          }, 800);
         }
       }, 100);
     });
