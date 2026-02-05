@@ -36,7 +36,38 @@
           </div>
           <div class="timeline-card glass">
             <div class="card-glow"></div>
-            <h3 class="timeline-title">{{ .title }}</h3>
+            <div class="timeline-card-header">
+              <h3 class="timeline-title">{{ .title }}</h3>
+              {{ if or .github .arxiv .huggingface .paper .website }}
+              <div class="timeline-links">
+                {{ if .github }}
+                <a href="{{ .github }}" class="link-btn github" target="_blank" rel="noopener" title="GitHub">
+                  <img src="https://api.iconify.design/mdi:github.svg" alt="GitHub" loading="lazy">
+                </a>
+                {{ end }}
+                {{ if .arxiv }}
+                <a href="{{ .arxiv }}" class="link-btn arxiv" target="_blank" rel="noopener" title="arXiv">
+                  <img src="https://api.iconify.design/cib:arxiv.svg" alt="arXiv" loading="lazy">
+                </a>
+                {{ end }}
+                {{ if .huggingface }}
+                <a href="{{ .huggingface }}" class="link-btn huggingface" target="_blank" rel="noopener" title="Hugging Face">
+                  <img src="https://api.iconify.design/logos:hugging-face-icon.svg" alt="Hugging Face" loading="lazy">
+                </a>
+                {{ end }}
+                {{ if .paper }}
+                <a href="{{ .paper }}" class="link-btn paper" target="_blank" rel="noopener" title="Paper">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                </a>
+                {{ end }}
+                {{ if .website }}
+                <a href="{{ .website }}" class="link-btn website" target="_blank" rel="noopener" title="Website">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.91-4.33-3.56zm2.95-8H5.08c.96-1.65 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+                </a>
+                {{ end }}
+              </div>
+              {{ end }}
+            </div>
             <p class="timeline-description">{{ .description }}</p>
             {{ if .tags }}
             <div class="timeline-tags">
@@ -493,6 +524,20 @@
   color: #fff;
 }
 
+/* 卡片头部布局 */
+.timeline-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.timeline-card-header .timeline-title {
+  flex: 1;
+  margin-bottom: 0;
+}
+
 .timeline-title {
   font-size: 2rem;
   font-weight: 600;
@@ -547,6 +592,115 @@
   backdrop-filter: blur(4px);
 }
 
+/* ===== 外部链接按钮 ===== */
+.timeline-links {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--fg-color-muted);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link-btn img,
+.link-btn svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  transition: all 0.3s ease;
+  object-fit: contain;
+}
+
+/* arxiv 图标比较长，增加宽度 */
+.link-btn.arxiv img {
+  width: 2rem;
+  height: 1rem;
+}
+
+.link-btn:hover {
+  transform: translateY(-2px) scale(1.1);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.link-btn.github:hover {
+  color: #fff;
+  background: rgba(36, 41, 47, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.link-btn.arxiv:hover {
+  color: #b31b1b;
+  background: rgba(179, 27, 27, 0.15);
+  border-color: rgba(179, 27, 27, 0.3);
+}
+
+.link-btn.huggingface:hover {
+  color: #ff9d00;
+  background: rgba(255, 157, 0, 0.15);
+  border-color: rgba(255, 157, 0, 0.3);
+}
+
+.link-btn.paper:hover {
+  color: #fff;
+  background: rgba(66, 133, 244, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.link-btn.website:hover {
+  color: #fff;
+  background: rgba(16, 185, 129, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 全局背景激活时的链接按钮样式 */
+.global-bg-container.active ~ .updates-page .link-btn {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.global-bg-container.active ~ .updates-page .link-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* 亮色主题下的链接按钮 */
+.colorscheme-light .link-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--fg-color-muted);
+}
+
+.colorscheme-light .link-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--fg-color);
+}
+
+/* 全局背景激活时（亮色主题下卡片变暗） */
+.colorscheme-light .global-bg-container.active ~ .updates-page .link-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.colorscheme-light .global-bg-container.active ~ .updates-page .link-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .timeline::before {
@@ -576,6 +730,16 @@
 
   .timeline-description {
     font-size: 1.4rem;
+  }
+
+  /* 移动端卡片头部布局调整 */
+  .timeline-card-header {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .timeline-links {
+    justify-content: flex-start;
   }
 
   /* 移动端减弱毛玻璃效果 */
