@@ -172,6 +172,14 @@
   color: var(--fg-color);
 }
 
+/* 亮色主题下装饰卡片阴影调整 */
+.colorscheme-light .global-bg-card {
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
 /* 亮色主题下悬浮时的日期标签 */
 .colorscheme-light .global-bg-container.active ~ .scroll-updates .update-card:hover .update-date {
   background: linear-gradient(135deg,
@@ -391,11 +399,11 @@
 
 /* 全局背景激活时，卡片向左移动以露出背景 */
 .global-bg-container.active ~ .scroll-updates .update-card {
-  transform: translateX(-30px);
+  transform: translateX(-50px);
 }
 
 .global-bg-container.active ~ .scroll-updates .update-card:hover {
-  transform: translateX(-30px) translateY(-6px) scale(1.02);
+  transform: translateX(-50px) translateY(-6px) scale(1.02);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -403,9 +411,11 @@
 .update-card[data-images]:hover .update-date,
 .global-bg-container.active ~ .scroll-updates .update-card:hover .update-date {
   background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.1) 100%);
-  border-color: rgba(255, 255, 255, 0.35);
+    rgba(var(--accent-rgb, 100, 150, 200), 0.35) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.15) 100%);
+  border-color: rgba(var(--accent-rgb, 100, 150, 200), 0.5);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .update-title {
