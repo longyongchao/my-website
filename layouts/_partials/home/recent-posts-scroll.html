@@ -1,0 +1,154 @@
+{{ $posts := where .Site.RegularPages "Type" "posts" | first 3 }}
+{{ if $posts }}
+<div class="scroll-posts">
+  {{ range $posts }}
+  <a href="{{ .RelPermalink }}" class="post-card">
+    <div class="post-glow"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
+        {{ if .Params.tags }}
+        <span class="post-tag">{{ index .Params.tags 0 }}</span>
+        {{ end }}
+      </div>
+      <h3 class="post-title">{{ .Title }}</h3>
+      <p class="post-summary">{{ .Summary | truncate 120 }}</p>
+    </div>
+    <div class="post-arrow">→</div>
+  </a>
+  {{ end }}
+</div>
+<a href="/posts/" class="section-link">
+  {{ i18n "view_all_posts" | default "查看全部文章" }} →
+</a>
+{{ end }}
+
+<style>
+.scroll-posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background: var(--card-bg, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 20px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+}
+
+.post-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--accent-color) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--accent-color);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+.post-card:hover::before {
+  opacity: 0.05;
+}
+
+.post-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.post-date {
+  font-size: 1.2rem;
+  color: var(--fg-color-muted);
+  font-weight: 500;
+}
+
+.post-tag {
+  padding: 0.3rem 0.8rem;
+  background: var(--accent-color);
+  color: var(--bg-color);
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.post-title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--fg-color);
+  line-height: 1.4;
+}
+
+.post-summary {
+  font-size: 1.4rem;
+  color: var(--fg-color-muted);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.post-arrow {
+  font-size: 2rem;
+  color: var(--fg-color-muted);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+  align-self: flex-end;
+}
+
+.post-card:hover .post-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+  .scroll-posts {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .post-card {
+    padding: 1.5rem;
+  }
+  
+  .post-title {
+    font-size: 1.5rem;
+  }
+  
+  .post-summary {
+    font-size: 1.3rem;
+  }
+  
+  .post-arrow {
+    display: none;
+  }
+}
+</style>

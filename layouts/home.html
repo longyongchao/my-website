@@ -1,0 +1,393 @@
+{{ define "content" }}
+<div class="apple-home">
+  <!-- 第一屏：Hero 区域 -->
+  <section class="hero-section">
+    <div class="hero-content">
+      {{ partialCached "home/avatar.html" . }}
+      {{ partialCached "home/author.html" . }}
+      {{ partialCached "home/social.html" . }}
+      
+      <!-- 滚动提示 -->
+      <div class="scroll-hint">
+        <div class="scroll-mouse">
+          <div class="scroll-wheel"></div>
+        </div>
+        <span class="scroll-text">{{ i18n "scroll_explore" | default "向下滚动探索" }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第二屏：近况区域 -->
+  <section class="content-section updates-reveal">
+    <div class="section-wrapper">
+      <div class="section-header">
+        <h2 class="section-title">{{ i18n "recent_updates" | default "最新近况" }}</h2>
+        <p class="section-subtitle">{{ i18n "milestones_record" | default "记录人生中的重要里程碑" }}</p>
+      </div>
+      {{ partial "home/recent-updates-scroll.html" . }}
+    </div>
+  </section>
+
+  <!-- 第三屏：博客区域 -->
+  <section class="content-section posts-reveal">
+    <div class="section-wrapper">
+      <div class="section-header">
+        <h2 class="section-title">{{ i18n "recent_posts" | default "最新文章" }}</h2>
+        <p class="section-subtitle">{{ i18n "thoughts_sharing" | default "分享我的思考与经验" }}</p>
+      </div>
+      {{ partial "home/recent-posts-scroll.html" . }}
+    </div>
+  </section>
+
+  <!-- 底部空间 -->
+  <div class="bottom-spacer"></div>
+</div>
+
+<style>
+/* 覆盖主题 .content 的 flex 布局 */
+.content {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+/* ===== 整体布局 ===== */
+.apple-home {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+/* ===== Hero 区域 - 100vh 固定 ===== */
+.hero-section {
+  height: 100vh;
+  min-height: 600px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 0 2rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 滚动时 Hero 向上淡出 */
+.apple-home.scrolled .hero-content {
+  opacity: 0.3;
+  transform: translateY(-30px);
+  transition: all 0.6s ease;
+}
+
+/* 头像样式 */
+.hero-content .avatar img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin-bottom: 2rem;
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.hero-content .avatar img:hover {
+  transform: scale(1.05);
+}
+
+/* 名字 */
+.hero-content h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+  color: var(--fg-color);
+}
+
+/* 身份 */
+.hero-content h2 {
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin: 0 0 2rem 0;
+  color: var(--fg-color-muted);
+  line-height: 1.6;
+}
+
+/* 社交链接 */
+.hero-content > ul {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hero-content > ul li {
+  display: inline-block;
+}
+
+.hero-content > ul a {
+  font-size: 1.8rem;
+  color: var(--fg-color-muted);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+
+.hero-content > ul a:hover {
+  color: var(--link-color);
+  transform: translateY(-4px) scale(1.1);
+}
+
+/* ===== 滚动提示 ===== */
+.scroll-hint {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0.6;
+  animation: fadeInUp 1s ease 0.5s both;
+}
+
+.scroll-mouse {
+  width: 26px;
+  height: 40px;
+  border: 2px solid var(--fg-color-muted);
+  border-radius: 13px;
+  position: relative;
+  opacity: 0.6;
+}
+
+.scroll-wheel {
+  width: 4px;
+  height: 8px;
+  background: var(--fg-color-muted);
+  border-radius: 2px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scrollWheel 2s ease-in-out infinite;
+}
+
+@keyframes scrollWheel {
+  0%, 100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateX(-50%) translateY(12px);
+  }
+}
+
+.scroll-text {
+  font-size: 1.2rem;
+  color: var(--fg-color-muted);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 0.6;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* 滚动后隐藏提示 */
+.apple-home.scrolled .scroll-hint {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===== 内容区域 ===== */
+.content-section {
+  min-height: 100vh;
+  width: 100%;
+  padding: 4rem 2rem;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.content-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 内容包装器 - 确保居中 */
+.section-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 区域标题 */
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 3.6rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  font-size: 1.6rem;
+  color: var(--fg-color-muted);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ===== 底部空间 ===== */
+.bottom-spacer {
+  height: 20vh;
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 768px) {
+  .hero-content .avatar img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.4rem;
+  }
+  
+  .hero-content h2 {
+    font-size: 1.3rem;
+  }
+  
+  .section-title {
+    font-size: 2.4rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .content-section {
+    padding: 3rem 1.5rem;
+  }
+  
+  .section-wrapper {
+    max-width: 100%;
+  }
+}
+
+@media (max-height: 700px) {
+  .hero-content .avatar img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.6rem;
+  }
+  
+  .hero-content h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+}
+</style>
+
+<script>
+// 阻尼滚动效果
+document.addEventListener('DOMContentLoaded', function() {
+  const appleHome = document.querySelector('.apple-home');
+  const contentSections = document.querySelectorAll('.content-section');
+  
+  const damping = 0.2;
+  let targetScrollY = window.scrollY;
+  let currentScrollY = window.scrollY;
+  let isScrolling = false;
+  
+  window.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    targetScrollY = Math.max(0, Math.min(maxScroll, targetScrollY + e.deltaY * 1.5));
+    
+    if (!isScrolling) {
+      isScrolling = true;
+      smoothScroll();
+    }
+  }, { passive: false });
+  
+  function smoothScroll() {
+    const diff = targetScrollY - currentScrollY;
+    
+    if (Math.abs(diff) < 0.5) {
+      currentScrollY = targetScrollY;
+      window.scrollTo(0, currentScrollY);
+      isScrolling = false;
+    } else {
+      currentScrollY += diff * damping;
+      window.scrollTo(0, currentScrollY);
+      requestAnimationFrame(smoothScroll);
+    }
+    
+    updateUI(currentScrollY);
+  }
+  
+  function updateUI(scrollY) {
+    if (scrollY > 50) {
+      appleHome.classList.add('scrolled');
+    } else {
+      appleHome.classList.remove('scrolled');
+    }
+    
+    contentSections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const scrollProgress = (scrollY + windowHeight - sectionTop) / (windowHeight + sectionHeight);
+      
+      if (scrollProgress > 0.15) {
+        section.classList.add('visible');
+      } else {
+        section.classList.remove('visible');
+      }
+    });
+  }
+  
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        targetScrollY = window.scrollY;
+        currentScrollY = window.scrollY;
+        updateUI(window.scrollY);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+  
+  updateUI(window.scrollY);
+});
+</script>
+{{ end }}

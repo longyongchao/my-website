@@ -1,0 +1,40 @@
+{{ $updatesPage := .Site.GetPage "/updates" }}
+{{ if $updatesPage }}
+{{ $timeline := $updatesPage.Params.timeline }}
+{{ if $timeline }}
+<section class="recent-updates">
+  <div class="updates-header">
+    <h3 class="updates-title">
+      <a href="{{ $updatesPage.RelPermalink }}">
+        {{ i18n "recent_updates" | default "最新近况" }}
+      </a>
+    </h3>
+    <a href="{{ $updatesPage.RelPermalink }}" class="view-all">
+      {{ i18n "view_all" | default "查看全部" }} →
+    </a>
+  </div>
+  
+  <div class="updates-list">
+    {{ range first 3 $timeline }}
+    <div class="update-item">
+      <div class="update-marker">
+        <div class="marker-dot"></div>
+      </div>
+      <div class="update-content">
+        <div class="update-date">{{ .date }}</div>
+        <div class="update-title">{{ .title }}</div>
+        <div class="update-desc">{{ .description | truncate 80 }}</div>
+        {{ if .tags }}
+        <div class="update-tags">
+          {{ range first 2 .tags }}
+          <span class="update-tag">{{ . }}</span>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+{{ end }}
