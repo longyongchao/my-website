@@ -1,5 +1,5 @@
 [recent_updates]
-other = "最新近况"
+other = "时刻"
 
 [view_all]
 other = "查看全部"
@@ -8,16 +8,16 @@ other = "查看全部"
 other = "向下滚动探索"
 
 [milestones_record]
-other = "记录人生中的重要里程碑"
+other = "一些可能有意义的时刻"
 
 [recent_posts]
-other = "最新文章"
+other = "文章"
 
 [thoughts_sharing]
-other = "分享我的思考与经验"
+other = "不是AI生成的"
 
 [view_all_updates]
-other = "查看全部近况"
+other = "其它"
 
 [view_all_posts]
-other = "查看全部文章"
+other = "全部"

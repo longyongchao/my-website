@@ -1,29 +1,61 @@
 +++
-title = "近况"
-subtitle = "记录人生中的重要里程碑"
+title = "人生"
+subtitle = "希望不要被历史忘记"
 layout = "updates"
 
 [[timeline]]
-date = "2025-01"
-title = "加入百度大模型算法组"
-description = "以实习生身份加入百度大模型算法组，参与前沿大语言模型的研究与开发工作。专注于模型优化与算法创新，致力于推动 AI 技术的边界。"
-tags = ["实习", "大模型", "算法"]
-# Logo/Icon 类图片使用 contain 模式，完整显示
-images = ["/images/ernie-logo.png"]
-image_fit = "contain"
+date = "2026-01-26 20:56"
+title = "🎉 Copy-Paste to Mitigate Large Language Model Hallucinations 被 ICLR 2026 接收！"
+description = "第一篇正儿八经的独一论文，双非本硕博也中人工智能顶会了"
+tags = ["Accepted", "表示学习国际大会 2026", "大语言模型"]
+# 照片/背景图使用 cover 模式（或不填，默认就是 cover）
+# 外部链接（可选）
+github = "https://github.com/longyongchao/CopyPasteLLM"
+arxiv = "https://arxiv.org/abs/2510.00508"
+huggingface = "https://huggingface.co/wingchiuloong/CopyPasteLLM-L3-8B"
 
 [[timeline]]
-date = "2026-02"
-title = "🎉独作论文收录于 ICLR 2026"
-description = "我的独立研究论文被国际顶级会议 ICLR 2026 接收。这项研究探索了深度学习领域的新方向，为领域发展贡献了自己的一份力量。"
-tags = ["论文", "ICLR", "深度学习"]
-# 照片/背景图使用 cover 模式（或不填，默认就是 cover）
-images = ["/images/iclr-logo.jpg", "/images/rio-de-janeiro-landmark.jpg"]
-image_fit = "contain"
-# 外部链接（可选）
-github = "https://github.com/yourusername/iclr-2026-paper"
-arxiv = "https://arxiv.org/abs/2501.xxxxx"
-huggingface = "https://huggingface.co/yourusername/iclr-2026-model"
+date = "2026-01-26 10:00"
+title = "加入百度大模型算法组，做预训练"
+description = "希望文心一言6.0有我的贡献"
+tags = ["大厂实习", "大模型预训练", "显卡真多"]
+
+[[timeline]]
+date = "2026-01-09"
+title = "登上八达岭长城"
+description = "真壮观~"
+tags = ["长樱在手"]
+images = ["/images/long-wall.jpeg"]
+
+[[timeline]]
+date = "2025-10-20"
+title = "来北京大学健康数据科学国家研究院学习三个月"
+description = "认识厉害的人"
+tags = ["北大", "HongLab"]
+
+[[timeline]]
+date = "2024-08-25"
+title = "踏上读博之旅"
+description = "人生无非是一场游戏，选择无论对错"
+tags = ["天津理工大学", "计算机科学与技术", "大模型"]
+
+[[timeline]]
+date = "2022-07"
+title = "加入中交"
+description = "成为一名世界500强国企员工"
+tags = ["国企", "获得土木老哥徽章一枚"]
+
+[[timeline]]
+date = "2022-06-25"
+title = "硕士毕业"
+description = "从电子转向计算机，走过的每一步都算数"
+tags = ["广东财经大学", "计算机技术", "图神经网络"]
+
+[[timeline]]
+date = "2017-07-01"
+title = "加入东芝"
+description = "成为一名世界500强外企员工，感觉未来可能还不错"
+tags = ["半导体", "外企"]
 +++
 
 > 时间是最好的见证者，每一步都值得被记录。
