@@ -1,6 +1,6 @@
 +++
-title = "Contact"
+title = "联系"
 slug = "contact"
 +++
 
-Follow me, @johndoe.
+欢迎与我联系！
