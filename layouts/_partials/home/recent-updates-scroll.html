@@ -91,6 +91,107 @@
   -webkit-backdrop-filter: blur(2px);
 }
 
+/* ===== 亮色主题优化 ===== */
+/* 亮色主题下降低背景亮度，避免刺眼 */
+.colorscheme-light .global-bg-image {
+  filter: brightness(0.6) saturate(0.8);
+  transition: transform 6s ease-out, filter 0.8s ease;
+}
+
+/* 亮色主题下添加更强的暗色遮罩 */
+.colorscheme-light .global-bg-overlay {
+  background:
+    /* 顶部暗色渐变，平滑过渡到白色背景 */
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.7) 15%,
+      rgba(255, 255, 255, 0.3) 35%,
+      transparent 60%
+    ),
+    /* 底部暗色渐变 */
+    linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.7) 15%,
+      rgba(255, 255, 255, 0.3) 35%,
+      transparent 60%
+    ),
+    /* 径向暗角 */
+    radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+}
+
+/* 全局背景激活时，遮罩变柔和 */
+.colorscheme-light .global-bg-container.active .global-bg-overlay {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.4) 20%,
+      rgba(255, 255, 255, 0.1) 40%,
+      transparent 60%
+    ),
+    linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.4) 20%,
+      rgba(255, 255, 255, 0.1) 40%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.25) 100%
+    );
+}
+
+/* 亮色主题下卡片样式优化 */
+.colorscheme-light .update-card.glass {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 全局背景激活时，卡片变暗以突出背景 */
+.colorscheme-light .global-bg-container.active ~ .scroll-updates .update-card {
+  background: rgba(40, 40, 50, 0.75);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 20px 40px -10px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.colorscheme-light .global-bg-container.active ~ .scroll-updates .update-card:hover {
+  background: rgba(30, 30, 40, 0.85);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 亮色主题下默认的日期标签 */
+.colorscheme-light .update-date {
+  background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.02) 100%);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--fg-color);
+}
+
+/* 亮色主题下悬浮时的日期标签 */
+.colorscheme-light .global-bg-container.active ~ .scroll-updates .update-card:hover .update-date {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 100%);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
 .scroll-updates {
   display: flex;
   flex-direction: column;
