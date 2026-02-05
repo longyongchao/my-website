@@ -1,0 +1,301 @@
+{{ define "title" }}
+  {{ .Title }} · {{ .Site.Title }}
+{{ end }}
+
+{{ define "content" }}
+<section class="container page updates-page">
+  <article>
+    <header class="updates-header">
+      <h1 class="title">
+        <a class="title-link" href="{{ .Permalink | safeURL }}">
+          {{ .Title }}
+        </a>
+      </h1>
+      <p class="subtitle">{{ .Params.subtitle | default "" }}</p>
+    </header>
+
+    <div class="timeline">
+      {{ range .Params.timeline }}
+      <div class="timeline-item" data-aos="fade-up">
+        <div class="timeline-marker">
+          <div class="marker-dot"></div>
+          <div class="marker-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-date">
+            <span class="date-badge">{{ .date }}</span>
+          </div>
+          <div class="timeline-card">
+            <div class="card-glow"></div>
+            <h3 class="timeline-title">{{ .title }}</h3>
+            <p class="timeline-description">{{ .description }}</p>
+            {{ if .tags }}
+            <div class="timeline-tags">
+              {{ range .tags }}
+              <span class="tag">{{ . }}</span>
+              {{ end }}
+            </div>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+
+    {{ .Content }}
+  </article>
+</section>
+
+<style>
+/* 时间线页面样式 */
+.updates-page {
+  max-width: 800px;
+}
+
+.updates-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.updates-header .subtitle {
+  font-size: 1.1rem;
+  color: var(--fg-color-muted);
+  margin-top: 0.5rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+/* 时间线容器 */
+.timeline {
+  position: relative;
+  padding: 2rem 0;
+}
+
+/* 中央竖线 */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 120px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--accent-color) 10%,
+    var(--accent-color) 90%,
+    transparent 100%
+  );
+  opacity: 0.3;
+}
+
+/* 时间线项目 */
+.timeline-item {
+  display: flex;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-item:last-child .marker-line {
+  display: none;
+}
+
+/* 标记区域 */
+.timeline-marker {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.marker-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: 3px solid var(--bg-color);
+  box-shadow: 0 0 0 2px var(--accent-color);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.marker-line {
+  flex: 1;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-color) 0%,
+    var(--accent-color) 70%,
+    transparent 100%
+  );
+  opacity: 0.2;
+  margin-top: 8px;
+}
+
+/* 悬停效果 */
+.timeline-item:hover .marker-dot {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 3px var(--accent-color), 0 0 20px var(--accent-color);
+}
+
+/* 内容区域 */
+.timeline-content {
+  flex: 1;
+  margin-left: 2rem;
+  padding-top: 0.2rem;
+}
+
+.timeline-date {
+  margin-bottom: 0.75rem;
+}
+
+.date-badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  background: var(--accent-color);
+  color: var(--bg-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+/* 卡片样式 */
+.timeline-card {
+  position: relative;
+  background: var(--card-bg, var(--bg-color-alt));
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    var(--accent-color) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.timeline-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color);
+  box-shadow: 
+    0 20px 40px -15px rgba(0, 0, 0, 0.2),
+    0 0 0 1px var(--accent-color);
+}
+
+.timeline-card:hover .card-glow {
+  opacity: 0.05;
+}
+
+.timeline-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--fg-color);
+  line-height: 1.4;
+}
+
+.timeline-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--fg-color-muted);
+  margin-bottom: 1rem;
+}
+
+/* 标签 */
+.timeline-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  padding: 0.25rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 15px;
+  font-size: 0.75rem;
+  color: var(--fg-color-muted);
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: var(--accent-color-alpha);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .timeline::before {
+    left: 20px;
+  }
+  
+  .timeline-marker {
+    width: 40px;
+  }
+  
+  .timeline-content {
+    margin-left: 1rem;
+  }
+  
+  .timeline-card {
+    padding: 1.25rem;
+  }
+}
+
+/* 深色模式变量调整 */
+.colorscheme-dark .timeline-card {
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --accent-color-alpha: rgba(156, 163, 175, 0.1);
+}
+
+.colorscheme-light .timeline-card {
+  --card-bg: #ffffff;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --accent-color-alpha: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.colorscheme-light .timeline-card:hover {
+  box-shadow: 
+    0 20px 40px -15px rgba(0, 0, 0, 0.15),
+    0 0 0 1px var(--accent-color);
+}
+</style>
+
+<script>
+// 卡片光效跟随鼠标
+document.querySelectorAll('.timeline-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty('--mouse-x', `${x}%`);
+    card.style.setProperty('--mouse-y', `${y}%`);
+  });
+});
+</script>
+
+{{ partial "posts/math.html" . }}
+{{ end }}

@@ -194,9 +194,9 @@ weight = 2
 url = "posts/"
 
 [[languages.zh.menu.main]]
-name = "项目"
+name = "近况"
 weight = 3
-url = "projects/"
+url = "updates/"
 
 [[languages.zh.menu.main]]
 name = "联系我"
@@ -218,9 +218,9 @@ weight = 2
 url = "posts/"
 
 [[languages.en.menu.main]]
-name = "Projects"
+name = "Updates"
 weight = 3
-url = "projects/"
+url = "updates/"
 
 [[languages.en.menu.main]]
 name = "Contact me"
