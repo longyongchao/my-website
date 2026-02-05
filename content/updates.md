@@ -9,8 +9,8 @@ title = "加入百度大模型算法组"
 description = "以实习生身份加入百度大模型算法组，参与前沿大语言模型的研究与开发工作。专注于模型优化与算法创新，致力于推动 AI 技术的边界。"
 tags = ["实习", "大模型", "算法"]
 # Logo/Icon 类图片使用 contain 模式，完整显示
-images = ["/images/baidu-logo.jpg"]
-image_fit = "cover"
+images = ["/images/ernie-logo.png"]
+image_fit = "contain"
 
 [[timeline]]
 date = "2026-02"

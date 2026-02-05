@@ -16,9 +16,9 @@
 <div class="scroll-updates">
   {{ range first 3 $sortedTimeline }}
   {{ $imageFit := .image_fit | default "cover" }}
-  <div class="update-card glass"
-       {{ if .images }}data-images="{{ range $i, $img := .images }}{{ if $i }},{{ end }}{{ $img }}{{ end }}"{{ end }}
-       data-image-fit="{{ $imageFit }}">
+  <div class="update-card glass" {{ if .images
+    }}data-images="{{ range $i, $img := .images }}{{ if $i }},{{ end }}{{ $img }}{{ end }}" {{ end }}
+    data-image-fit="{{ $imageFit }}">
     <!-- 发光效果层 -->
     <div class="update-glow"></div>
 
@@ -59,12 +59,18 @@
       {{ end }}
       {{ if .paper }}
       <a href="{{ .paper }}" class="link-btn paper" target="_blank" rel="noopener" title="Paper">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+        </svg>
       </a>
       {{ end }}
       {{ if .website }}
       <a href="{{ .website }}" class="link-btn website" target="_blank" rel="noopener" title="Website">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.91-4.33-3.56zm2.95-8H5.08c.96-1.65 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.91-4.33-3.56zm2.95-8H5.08c.96-1.65 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z" />
+        </svg>
       </a>
       {{ end }}
       {{ range .icons }}
@@ -84,631 +90,646 @@
 {{ end }}
 
 <style>
-/* ===== 全局背景层 ===== */
-.global-bg-container {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-}
-
-.global-bg-container.active {
-  opacity: 1;
-}
-
-/* 右侧背景卡片 - 装饰性设计 */
-.global-bg-card {
-  position: absolute;
-  right: 5%;
-  top: 5%;
-  width: 30%;
-  height: 90%;
-  border-radius: 24px 8px 24px 24px;
-  overflow: hidden;
-  box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  transform: translateY(20px) scale(0.98);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.global-bg-container.active .global-bg-card {
-  transform: translateY(0) scale(1);
-}
-
-.global-bg-image {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.05);
-  transition: transform 8s ease-out;
-}
-
-.global-bg-container.active .global-bg-image {
-  transform: scale(1);
-}
-
-/* 左侧发光边框效果 */
-.bg-glow-border {
-  position: absolute;
-  left: -2px;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    var(--accent-color) 50%,
-    transparent 100%
-  );
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-.global-bg-container.active .bg-glow-border {
-  opacity: 0.6;
-}
-
-/* ===== 亮色主题优化 ===== */
-/* 亮色主题下降低背景亮度，避免刺眼 */
-.colorscheme-light .global-bg-image {
-  filter: brightness(0.6) saturate(0.8);
-  transition: transform 6s ease-out, filter 0.8s ease;
-}
-
-/* 亮色主题下默认的日期标签 */
-.colorscheme-light .update-date {
-  background: linear-gradient(135deg,
-    rgba(0, 0, 0, 0.05) 0%,
-    rgba(0, 0, 0, 0.02) 100%);
-  border-color: rgba(0, 0, 0, 0.1);
-  color: var(--fg-color);
-}
-
-/* 亮色主题下装饰卡片阴影调整 */
-.colorscheme-light .global-bg-card {
-  box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(0, 0, 0, 0.15);
-}
-
-/* 亮色主题下悬浮时的日期标签 */
-.colorscheme-light .global-bg-container.active ~ .scroll-updates .update-card:hover .update-date {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.1) 100%);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #fff;
-}
-
-.scroll-updates {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.update-card {
-  display: flex;
-  align-items: stretch;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  background: var(--card-bg, rgba(255, 255, 255, 0.03));
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-  border-radius: 20px;
-  color: inherit;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  isolation: isolate;
-}
-
-/* 全局背景激活时，卡片向左移动以露出背景 */
-.global-bg-container.active ~ .scroll-updates .update-card {
-  transform: translateX(-30px);
-}
-
-.global-bg-container.active ~ .scroll-updates .update-card:hover {
-  transform: translateX(-30px) translateY(-6px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* 主内容链接区 */
-.update-main-link {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex: 1;
-  text-decoration: none;
-  color: inherit;
-  min-width: 0;
-}
-
-/* ===== 毛玻璃效果 ===== */
-.update-card.glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.update-card.glass::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  border-radius: inherit;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* 发光边框效果 */
-.update-card.glass::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
-  border-radius: 21px;
-  z-index: -2;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.update-card.glass:hover::after {
-  opacity: 1;
-}
-
-/* 原来的渐变遮罩（无图片时） */
-.update-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, var(--accent-color) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: -1;
-}
-
-.update-card:hover::before {
-  opacity: 0.08;
-}
-
-/* 发光效果 */
-.update-glow {
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(
-    135deg,
-    var(--accent-color) 0%,
-    transparent 50%,
-    var(--accent-color) 100%
-  );
-  border-radius: 22px;
-  opacity: 0;
-  filter: blur(20px);
-  transform: scale(0.95);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: -1;
-}
-
-.update-card:hover .update-glow {
-  opacity: 0.4;
-  transform: scale(1);
-}
-
-.update-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 30px 60px -20px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* 移除全局背景激活时的卡片背景变化 */
-
-/* 内容层 */
-.update-content {
-  flex: 1;
-  position: relative;
-  z-index: 10;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.update-card:hover .update-content {
-  transform: translateY(-2px);
-}
-
-.update-date {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--fg-color);
-  margin-bottom: 0.8rem;
-  letter-spacing: 0.02em;
-  transition: all 0.3s ease;
-  padding: 0.5rem 1rem;
-  background: linear-gradient(135deg,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.15) 0%,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.05) 100%);
-  border-radius: 8px;
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(var(--accent-rgb, 100, 150, 200), 0.2);
-  position: relative;
-  z-index: 2;
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
-}
-
-/* 左侧装饰线 */
-.update-date::before {
-  content: '';
-  width: 3px;
-  height: 1rem;
-  background: linear-gradient(180deg,
-    var(--accent-color) 0%,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.4) 100%);
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
-
-.update-card:hover .update-date {
-  background: linear-gradient(135deg,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.25) 0%,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.1) 100%);
-  border-color: rgba(var(--accent-rgb, 100, 150, 200), 0.4);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(var(--accent-rgb, 100, 150, 200), 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-
-.update-card:hover .update-date::before {
-  height: 1.2rem;
-  background: linear-gradient(180deg,
-    var(--accent-color) 0%,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.6) 100%);
-  box-shadow: 0 0 8px rgba(var(--accent-rgb, 100, 150, 200), 0.6);
-}
-
-/* 全局背景激活时，卡片向左移动以露出背景 */
-.global-bg-container.active ~ .scroll-updates .update-card {
-  transform: translateX(-110px);
-}
-
-.global-bg-container.active ~ .scroll-updates .update-card:hover {
-  transform: translateX(-110px) translateY(-6px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* 确保有背景图片时日期标签依然清晰可见 */
-.update-card[data-images]:hover .update-date,
-.global-bg-container.active ~ .scroll-updates .update-card:hover .update-date {
-  background: linear-gradient(135deg,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.35) 0%,
-    rgba(var(--accent-rgb, 100, 150, 200), 0.15) 100%);
-  border-color: rgba(var(--accent-rgb, 100, 150, 200), 0.5);
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.update-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin: 0 0 0.8rem 0;
-  color: var(--fg-color);
-  line-height: 1.3;
-  transition: all 0.3s ease;
-}
-
-.update-desc {
-  font-size: 1.4rem;
-  color: var(--fg-color-muted);
-  margin: 0 0 1rem 0;
-  line-height: 1.6;
-  transition: all 0.3s ease;
-}
-
-.update-tags {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-}
-
-.update-tags .tag {
-  padding: 0.4rem 1rem;
-  background: var(--tag-bg, rgba(156, 163, 175, 0.15));
-  border-radius: 20px;
-  font-size: 1.1rem;
-  color: var(--fg-color-muted);
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
-}
-
-.update-arrow {
-  font-size: 2rem;
-  color: var(--fg-color-muted);
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 1;
-}
-
-.update-card:hover .update-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* ===== 外部链接按钮 ===== */
-.update-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding-left: 1rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  margin-left: 0.5rem;
-  justify-content: center;
-}
-
-.link-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.8rem;
-  height: 2.8rem;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--fg-color-muted);
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.link-btn img,
-.link-btn svg {
-  width: 1.4rem;
-  height: 1.4rem;
-  transition: all 0.3s ease;
-  object-fit: contain;
-}
-
-/* arxiv 图标比较长，增加宽度 */
-.link-btn.arxiv img {
-  width: 2.2rem;
-  height: 1.1rem;
-}
-
-.link-btn:hover {
-  transform: translateY(-2px) scale(1.1);
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.link-btn.github:hover {
-  color: #fff;
-  background: rgba(36, 41, 47, 0.8);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.link-btn.arxiv:hover {
-  color: #b31b1b;
-  background: rgba(179, 27, 27, 0.15);
-  border-color: rgba(179, 27, 27, 0.3);
-}
-
-.link-btn.huggingface:hover {
-  color: #ff9d00;
-  background: rgba(255, 157, 0, 0.15);
-  border-color: rgba(255, 157, 0, 0.3);
-}
-
-.link-btn.paper:hover {
-  color: #fff;
-  background: rgba(66, 133, 244, 0.8);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.link-btn.website:hover {
-  color: #fff;
-  background: rgba(16, 185, 129, 0.8);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.link-btn.custom:hover {
-  color: #fff;
-  background: rgba(100, 100, 200, 0.8);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* 全局背景激活时的链接按钮样式 */
-.global-bg-container.active ~ .scroll-updates .link-btn {
-  background: rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.global-bg-container.active ~ .scroll-updates .link-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-/* 亮色主题下的链接按钮 */
-.colorscheme-light .update-links {
-  border-left-color: rgba(0, 0, 0, 0.1);
-}
-
-.colorscheme-light .link-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-  color: var(--fg-color-muted);
-}
-
-.colorscheme-light .link-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: var(--fg-color);
-}
-
-/* 全局背景激活时（亮色主题下卡片变暗） */
-.colorscheme-light .global-bg-container.active ~ .scroll-updates .link-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.colorscheme-light .global-bg-container.active ~ .scroll-updates .link-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-.section-link {
-  display: inline-block;
-  margin-top: 2rem;
-  font-size: 1.5rem;
-  color: var(--accent-color);
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.section-link:hover {
-  transform: translateX(8px);
-}
-
-/* 响应式优化 */
-@media (max-width: 768px) {
-  .update-card {
-    padding: 1.5rem;
-  }
-
-  .update-card:hover {
-    transform: translateY(-4px) scale(1.01);
-  }
-
-  /* 移动端全局背景调整 */
-  .global-bg-image {
-    background-position: center;
-  }
-
-  .update-title {
-    font-size: 1.5rem;
-  }
-
-  .update-desc {
-    font-size: 1.3rem;
-  }
-
-  .update-arrow {
-    display: none;
-  }
-
-  /* 移动端减弱毛玻璃效果 */
-  .update-card.glass {
-    backdrop-filter: blur(10px) saturate(150%);
-    -webkit-backdrop-filter: blur(10px) saturate(150%);
-  }
-
-  /* 移动端链接按钮调整 */
-  .update-links {
-    flex-direction: row;
-    padding-left: 0;
-    padding-top: 1rem;
-    border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-left: 0;
-    margin-top: 0.5rem;
-    justify-content: flex-start;
-  }
-
-  .colorscheme-light .update-links {
-    border-top-color: rgba(0, 0, 0, 0.1);
-  }
-}
-
-/* 减少动画偏好支持 */
-@media (prefers-reduced-motion: reduce) {
-  .global-bg-container,
-  .global-bg-image,
-  .update-glow,
-  .update-content {
-    transition: none !important;
+  /* ===== 全局背景层 ===== */
+  .global-bg-container {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
   }
 
   .global-bg-container.active {
-    opacity: 0.9;
+    opacity: 1;
   }
-}
+
+  /* 右侧背景卡片 - 装饰性设计 */
+  .global-bg-card {
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    width: 30%;
+    height: 90%;
+    border-radius: 24px 8px 24px 24px;
+    overflow: hidden;
+    box-shadow:
+      0 30px 60px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    transform: translateY(20px) scale(0.98);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .global-bg-container.active .global-bg-card {
+    transform: translateY(0) scale(1);
+  }
+
+  .global-bg-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+    transition: transform 8s ease-out;
+  }
+
+  .global-bg-container.active .global-bg-image {
+    transform: scale(1);
+  }
+
+  /* 左侧发光边框效果 */
+  .bg-glow-border {
+    position: absolute;
+    left: -2px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom,
+        transparent 0%,
+        var(--accent-color) 50%,
+        transparent 100%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .global-bg-container.active .bg-glow-border {
+    opacity: 0.6;
+  }
+
+  /* ===== 亮色主题优化 ===== */
+  /* 亮色主题下降低背景亮度，避免刺眼 */
+  /* .colorscheme-light .global-bg-image {
+    filter: brightness(0.6) saturate(0.8);
+    transition: transform 6s ease-out, filter 0.8s ease;
+  } */
+
+  /* 亮色主题下默认的日期标签 */
+  .colorscheme-light .update-date {
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.05) 0%,
+        rgba(0, 0, 0, 0.02) 100%);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--fg-color);
+  }
+
+  /* 亮色主题下装饰卡片阴影调整 - 移除 inset 阴影 */
+  .colorscheme-light .global-bg-card {
+    box-shadow:
+      0 30px 60px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.08),
+      backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    transform: translateY(20px) scale(0.98);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .colorscheme-light .global-bg-container.active .global-bg-card {
+    transform: translateY(0) scale(1);
+  }
+
+  /* 亮色主题下装饰卡片边框移除 inset 阴影 */
+  .colorscheme-light .global-bg-card {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow:
+      0 30px 60px rgba(0, 0, 0, 0.15);
+  }
+
+  /* 亮色主题下装饰卡片阴影调整 */
+  .colorscheme-light .global-bg-card {
+    box-shadow:
+      0 30px 60px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  /* 亮色主题下悬浮时的日期标签 */
+  .colorscheme-light .global-bg-container.active~.scroll-updates .update-card:hover .update-date {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.1) 100%);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+  }
+
+  .scroll-updates {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .update-card {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: var(--card-bg, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    isolation: isolate;
+  }
+
+  /* 全局背景激活时，卡片向左移动以露出背景 */
+  .global-bg-container.active~.scroll-updates .update-card {
+    transform: translateX(-30px);
+  }
+
+  .global-bg-container.active~.scroll-updates .update-card:hover {
+    transform: translateX(-30px) translateY(-6px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* 主内容链接区 */
+  .update-main-link {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+    min-width: 0;
+  }
+
+  /* ===== 毛玻璃效果 ===== */
+  .update-card.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .update-card.glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%);
+    border-radius: inherit;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* 发光边框效果 */
+  .update-card.glass::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.1) 100%);
+    border-radius: 21px;
+    z-index: -2;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .update-card.glass:hover::after {
+    opacity: 1;
+  }
+
+  /* 原来的渐变遮罩（无图片时） */
+  .update-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--accent-color) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+  }
+
+  .update-card:hover::before {
+    opacity: 0.08;
+  }
+
+  /* 发光效果 */
+  .update-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg,
+        var(--accent-color) 0%,
+        transparent 50%,
+        var(--accent-color) 100%);
+    border-radius: 22px;
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(0.95);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+  }
+
+  .update-card:hover .update-glow {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  .update-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 30px 60px -20px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* 移除全局背景激活时的卡片背景变化 */
+
+  /* 内容层 */
+  .update-content {
+    flex: 1;
+    position: relative;
+    z-index: 10;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .update-card:hover .update-content {
+    transform: translateY(-2px);
+  }
+
+  .update-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--fg-color);
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.02em;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg,
+        rgba(var(--accent-rgb, 100, 150, 200), 0.15) 0%,
+        rgba(var(--accent-rgb, 100, 150, 200), 0.05) 100%);
+    border-radius: 8px;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(var(--accent-rgb, 100, 150, 200), 0.2);
+    position: relative;
+    z-index: 2;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  }
+
+  /* 左侧装饰线 */
+  .update-date::before {
+    content: '';
+    width: 3px;
+    height: 1rem;
+    background: linear-gradient(180deg,
+        var(--accent-color) 0%,
+        rgba(var(--accent-rgb, 100, 150, 200), 0.4) 100%);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .update-card:hover .update-date {
+    background: linear-gradient(135deg,
+        rgba(var(--accent-rgb, 100, 150, 200), 0.25) 0%,
+        rgba(var(--accent-rgb, 100, 150, 200), 0.1) 100%);
+    border-color: rgba(var(--accent-rgb, 100, 150, 200), 0.4);
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(var(--accent-rgb, 100, 150, 200), 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .update-card:hover .update-date::before {
+    height: 1.2rem;
+    background: linear-gradient(180deg,
+        var(--accent-color) 0%,
+        rgba(var(--accent-rgb, 100, 150, 200), 0.6) 100%);
+    box-shadow: 0 0 8px rgba(var(--accent-rgb, 100, 150, 200), 0.6);
+  }
+
+  /* 全局背景激活时，卡片向左移动以露出背景 */
+  .global-bg-container.active~.scroll-updates .update-card {
+    transform: translateX(-30px);
+  }
+
+  .global-bg-container.active~.scroll-updates .update-card:hover {
+    transform: translateX(-30px) translateY(-6px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* 确保有背景图片时日期标签依然清晰可见 */
+  .update-card[data-images]:hover .update-date,
+  .global-bg-container.active~.scroll-updates .update-card:hover .update-date {
+    background: linear-gradient(135deg,
+        rgba(var(--accent-rgb, 100, 150, 200), 0.35) 0%,
+        rgba(var(--accent-rgb, 100, 150, 200), 0.15) 100%);
+    border-color: rgba(var(--accent-rgb, 100, 150, 200), 0.5);
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .update-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 0.8rem 0;
+    color: var(--fg-color);
+    line-height: 1.3;
+    transition: all 0.3s ease;
+  }
+
+  .update-desc {
+    font-size: 1.4rem;
+    color: var(--fg-color-muted);
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+  }
+
+  .update-tags {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .update-tags .tag {
+    padding: 0.4rem 1rem;
+    background: var(--tag-bg, rgba(156, 163, 175, 0.15));
+    border-radius: 20px;
+    font-size: 1.1rem;
+    color: var(--fg-color-muted);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+  }
+
+  .update-arrow {
+    font-size: 2rem;
+    color: var(--fg-color-muted);
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .update-card:hover .update-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ===== 外部链接按钮 ===== */
+  .update-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    margin-left: 0.5rem;
+    justify-content: center;
+  }
+
+  .link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--fg-color-muted);
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .link-btn img,
+  .link-btn svg {
+    width: 1.4rem;
+    height: 1.4rem;
+    transition: all 0.3s ease;
+    object-fit: contain;
+  }
+
+  /* arxiv 图标比较长，增加宽度 */
+  .link-btn.arxiv img {
+    width: 2.2rem;
+    height: 1.1rem;
+  }
+
+  .link-btn:hover {
+    transform: translateY(-2px) scale(1.1);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .link-btn.github:hover {
+    color: #fff;
+    background: rgba(36, 41, 47, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .link-btn.arxiv:hover {
+    color: #b31b1b;
+    background: rgba(179, 27, 27, 0.15);
+    border-color: rgba(179, 27, 27, 0.3);
+  }
+
+  .link-btn.huggingface:hover {
+    color: #ff9d00;
+    background: rgba(255, 157, 0, 0.15);
+    border-color: rgba(255, 157, 0, 0.3);
+  }
+
+  .link-btn.paper:hover {
+    color: #fff;
+    background: rgba(66, 133, 244, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .link-btn.website:hover {
+    color: #fff;
+    background: rgba(16, 185, 129, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .link-btn.custom:hover {
+    color: #fff;
+    background: rgba(100, 100, 200, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* 全局背景激活时的链接按钮样式 */
+  .global-bg-container.active~.scroll-updates .link-btn {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .global-bg-container.active~.scroll-updates .link-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+
+  /* 亮色主题下的链接按钮 */
+  .colorscheme-light .update-links {
+    border-left-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .colorscheme-light .link-btn {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--fg-color-muted);
+  }
+
+  .colorscheme-light .link-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--fg-color);
+  }
+
+  /* 全局背景激活时（亮色主题下卡片变暗） */
+  .colorscheme-light .global-bg-container.active~.scroll-updates .link-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .colorscheme-light .global-bg-container.active~.scroll-updates .link-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+
+  .section-link {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .section-link:hover {
+    transform: translateX(8px);
+  }
+
+  /* 响应式优化 */
+  @media (max-width: 768px) {
+    .update-card {
+      padding: 1.5rem;
+    }
+
+    .update-card:hover {
+      transform: translateY(-4px) scale(1.01);
+    }
+
+    /* 移动端全局背景调整 */
+    .global-bg-image {
+      background-position: center;
+    }
+
+    .update-title {
+      font-size: 1.5rem;
+    }
+
+    .update-desc {
+      font-size: 1.3rem;
+    }
+
+    .update-arrow {
+      display: none;
+    }
+
+    /* 移动端减弱毛玻璃效果 */
+    .update-card.glass {
+      backdrop-filter: blur(10px) saturate(150%);
+      -webkit-backdrop-filter: blur(10px) saturate(150%);
+    }
+
+    /* 移动端链接按钮调整 */
+    .update-links {
+      flex-direction: row;
+      padding-left: 0;
+      padding-top: 1rem;
+      border-left: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-left: 0;
+      margin-top: 0.5rem;
+      justify-content: flex-start;
+    }
+
+    .colorscheme-light .update-links {
+      border-top-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  /* 减少动画偏好支持 */
+  @media (prefers-reduced-motion: reduce) {
+
+    .global-bg-container,
+    .global-bg-image,
+    .update-glow,
+    .update-content {
+      transition: none !important;
+    }
+
+    .global-bg-container.active {
+      opacity: 0.9;
+    }
+  }
 </style>
 
 <script>
-// 全局背景控制 - 支持多图轮播
-(function() {
-  const bgContainer = document.querySelector('.global-bg-container');
-  const bgCard = document.querySelector('.global-bg-card');
-  const bgImage = document.querySelector('.global-bg-card .global-bg-image');
-  const cards = document.querySelectorAll('.update-card[data-images]');
-  let currentCard = null;
-  let carouselInterval = null;
-  let isHovering = false;
-  let currentImageIndex = 0;
-  let imagesList = [];
+  // 全局背景控制 - 支持多图轮播
+  (function () {
+    const bgContainer = document.querySelector('.global-bg-container');
+    const bgCard = document.querySelector('.global-bg-card');
+    const bgImage = document.querySelector('.global-bg-card .global-bg-image');
+    const cards = document.querySelectorAll('.update-card[data-images]');
+    let currentCard = null;
+    let carouselInterval = null;
+    let isHovering = false;
+    let currentImageIndex = 0;
+    let imagesList = [];
 
-  // 预加载图片
-  function preloadImage(url) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(url);
-      img.onerror = reject;
-      img.src = url;
-    });
-  }
+    // 预加载图片
+    function preloadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(url);
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
 
-  // 预加载所有图片
-  function preloadAllImages(images) {
-    return Promise.all(images.map(url => preloadImage(url)));
-  }
+    // 预加载所有图片
+    function preloadAllImages(images) {
+      return Promise.all(images.map(url => preloadImage(url)));
+    }
 
-  // 设置背景图片（滑动动画）
-  function setBackgroundImage(url, direction = 'next') {
-    if (!bgImage || !bgCard) return;
+    // 设置背景图片（滑动动画）
+    function setBackgroundImage(url, direction = 'next') {
+      if (!bgImage || !bgCard) return;
 
-    // 获取当前背景图片作为旧图层
-    const currentBg = bgImage.style.backgroundImage;
+      // 获取当前背景图片作为旧图层
+      const currentBg = bgImage.style.backgroundImage;
 
-    // 如果有当前背景，创建旧图层（向左滑出）
-    if (currentBg && currentBg !== 'url()' && currentBg !== `url("${url}")`) {
-      const oldBgLayer = document.createElement('div');
-      oldBgLayer.className = 'bg-slide-layer old';
-      oldBgLayer.style.cssText = `
+      // 如果有当前背景，创建旧图层（向左滑出）
+      if (currentBg && currentBg !== 'url()' && currentBg !== `url("${url}")`) {
+        const oldBgLayer = document.createElement('div');
+        oldBgLayer.className = 'bg-slide-layer old';
+        oldBgLayer.style.cssText = `
         position: absolute;
         inset: 0;
         background-image: ${currentBg};
@@ -719,26 +740,26 @@
         transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1;
       `;
-      bgCard.appendChild(oldBgLayer);
+        bgCard.appendChild(oldBgLayer);
 
-      // 触发旧图层向左滑出
-      requestAnimationFrame(() => {
-        oldBgLayer.style.transform = 'translateX(-100%)';
-      });
+        // 触发旧图层向左滑出
+        requestAnimationFrame(() => {
+          oldBgLayer.style.transform = 'translateX(-100%)';
+        });
 
-      // 动画结束后移除旧图层
-      setTimeout(() => {
-        oldBgLayer.remove();
-      }, 800);
-    }
+        // 动画结束后移除旧图层
+        setTimeout(() => {
+          oldBgLayer.remove();
+        }, 800);
+      }
 
-    // 更新主背景（立即显示）
-    bgImage.style.backgroundImage = `url(${url})`;
+      // 更新主背景（立即显示）
+      bgImage.style.backgroundImage = `url(${url})`;
 
-    // 创建新的背景层（从右侧进入的过渡效果）
-    const newBgLayer = document.createElement('div');
-    newBgLayer.className = 'bg-slide-layer new';
-    newBgLayer.style.cssText = `
+      // 创建新的背景层（从右侧进入的过渡效果）
+      const newBgLayer = document.createElement('div');
+      newBgLayer.className = 'bg-slide-layer new';
+      newBgLayer.style.cssText = `
       position: absolute;
       inset: 0;
       background-image: url(${url});
@@ -749,115 +770,115 @@
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 2;
     `;
-    bgCard.appendChild(newBgLayer);
+      bgCard.appendChild(newBgLayer);
 
-    // 触发重绘后开始动画（从右滑入）
-    requestAnimationFrame(() => {
-      newBgLayer.style.transform = 'translateX(0)';
-    });
+      // 触发重绘后开始动画（从右滑入）
+      requestAnimationFrame(() => {
+        newBgLayer.style.transform = 'translateX(0)';
+      });
 
-    // 动画结束后清理
-    setTimeout(() => {
-      newBgLayer.remove();
-    }, 600);
-  }
-
-  // 开始轮播
-  function startCarousel(images, interval = 4000) {
-    if (images.length <= 1) return;
-
-    // 立即切换到第二张（如果有的话）
-    currentImageIndex = 0;
-
-    carouselInterval = setInterval(() => {
-      currentImageIndex = (currentImageIndex + 1) % images.length;
-      const nextImage = images[currentImageIndex];
-      setBackgroundImage(nextImage, 'next');
-    }, interval);
-  }
-
-  // 停止轮播
-  function stopCarousel() {
-    if (carouselInterval) {
-      clearInterval(carouselInterval);
-      carouselInterval = null;
+      // 动画结束后清理
+      setTimeout(() => {
+        newBgLayer.remove();
+      }, 600);
     }
-    currentImageIndex = 0;
-    imagesList = [];
 
-    // 清理所有过渡层（直接移除，无淡出动画）
-    const layers = bgContainer.querySelectorAll('.bg-slide-layer');
-    layers.forEach(layer => layer.remove());
-  }
+    // 开始轮播
+    function startCarousel(images, interval = 4000) {
+      if (images.length <= 1) return;
 
-  cards.forEach(card => {
-    const imagesAttr = card.getAttribute('data-images');
-    const imageFit = card.getAttribute('data-image-fit') || 'cover';
+      // 立即切换到第二张（如果有的话）
+      currentImageIndex = 0;
 
-    if (!imagesAttr) return;
+      carouselInterval = setInterval(() => {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        const nextImage = images[currentImageIndex];
+        setBackgroundImage(nextImage, 'next');
+      }, interval);
+    }
 
-    const images = imagesAttr.split(',').map(s => s.trim()).filter(s => s);
+    // 停止轮播
+    function stopCarousel() {
+      if (carouselInterval) {
+        clearInterval(carouselInterval);
+        carouselInterval = null;
+      }
+      currentImageIndex = 0;
+      imagesList = [];
 
-    // 鼠标进入卡片
-    card.addEventListener('mouseenter', () => {
-      isHovering = true;
-      currentCard = card;
-      imagesList = images;
+      // 清理所有过渡层（直接移除，无淡出动画）
+      const layers = bgContainer.querySelectorAll('.bg-slide-layer');
+      layers.forEach(layer => layer.remove());
+    }
 
-      // 预加载所有图片
-      preloadAllImages(images).then(() => {
-        if (!isHovering || currentCard !== card) return;
+    cards.forEach(card => {
+      const imagesAttr = card.getAttribute('data-images');
+      const imageFit = card.getAttribute('data-image-fit') || 'cover';
 
-        // 设置初始背景
-        bgImage.style.backgroundImage = `url(${images[0]})`;
-        bgContainer?.classList.add('active');
+      if (!imagesAttr) return;
 
-        // 根据图片适配模式调整背景尺寸
-        if (imageFit === 'contain') {
-          bgImage.style.backgroundSize = 'contain';
-          bgImage.style.backgroundRepeat = 'no-repeat';
-          bgImage.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-        } else {
-          bgImage.style.backgroundSize = 'cover';
-          bgImage.style.backgroundRepeat = 'no-repeat';
-          bgImage.style.backgroundColor = 'transparent';
-        }
+      const images = imagesAttr.split(',').map(s => s.trim()).filter(s => s);
 
-        // 如果有多张图片，启动轮播
-        if (images.length > 1) {
-          // 延迟后开始轮播，让用户先看第一张
-          setTimeout(() => {
-            if (isHovering && currentCard === card) {
-              startCarousel(images, 3500); // 3.5秒切换一次
-            }
-          }, 2000);
-        }
-      }).catch(() => {
-        // 图片加载失败，静默处理
+      // 鼠标进入卡片
+      card.addEventListener('mouseenter', () => {
+        isHovering = true;
+        currentCard = card;
+        imagesList = images;
+
+        // 预加载所有图片
+        preloadAllImages(images).then(() => {
+          if (!isHovering || currentCard !== card) return;
+
+          // 设置初始背景
+          bgImage.style.backgroundImage = `url(${images[0]})`;
+          bgContainer?.classList.add('active');
+
+          // 根据图片适配模式调整背景尺寸
+          if (imageFit === 'contain') {
+            bgImage.style.backgroundSize = 'contain';
+            bgImage.style.backgroundRepeat = 'no-repeat';
+            bgImage.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+          } else {
+            bgImage.style.backgroundSize = 'cover';
+            bgImage.style.backgroundRepeat = 'no-repeat';
+            bgImage.style.backgroundColor = 'transparent';
+          }
+
+          // 如果有多张图片，启动轮播
+          if (images.length > 1) {
+            // 延迟后开始轮播，让用户先看第一张
+            setTimeout(() => {
+              if (isHovering && currentCard === card) {
+                startCarousel(images, 3500); // 3.5秒切换一次
+              }
+            }, 2000);
+          }
+        }).catch(() => {
+          // 图片加载失败，静默处理
+        });
+      });
+
+      // 鼠标离开卡片
+      card.addEventListener('mouseleave', () => {
+        isHovering = false;
+        currentCard = null;
+
+        // 停止轮播
+        stopCarousel();
+
+        // 延迟隐藏背景
+        setTimeout(() => {
+          if (!isHovering) {
+            bgContainer?.classList.remove('active');
+            // 重置背景
+            setTimeout(() => {
+              if (!isHovering) {
+                bgImage.style.backgroundImage = '';
+              }
+            }, 800);
+          }
+        }, 100);
       });
     });
-
-    // 鼠标离开卡片
-    card.addEventListener('mouseleave', () => {
-      isHovering = false;
-      currentCard = null;
-
-      // 停止轮播
-      stopCarousel();
-
-      // 延迟隐藏背景
-      setTimeout(() => {
-        if (!isHovering) {
-          bgContainer?.classList.remove('active');
-          // 重置背景
-          setTimeout(() => {
-            if (!isHovering) {
-              bgImage.style.backgroundImage = '';
-            }
-          }, 800);
-        }
-      }, 100);
-    });
-  });
-})();
+  })();
 </script>
