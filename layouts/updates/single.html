@@ -156,15 +156,55 @@
 }
 
 .date-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.5rem 1.2rem;
-  background: var(--accent-color);
-  color: var(--bg-color);
-  font-size: 1.4rem;
+  background: linear-gradient(135deg,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.15) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.05) 100%);
+  border: 1px solid rgba(var(--accent-rgb, 100, 150, 200), 0.2);
+  color: var(--fg-color);
+  font-size: 1.3rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  border-radius: 20px;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-radius: 8px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  transition: all 0.3s ease;
+}
+
+/* 左侧装饰线 */
+.date-badge::before {
+  content: '';
+  width: 3px;
+  height: 1rem;
+  background: linear-gradient(180deg,
+    var(--accent-color) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.4) 100%);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.timeline-item:hover .date-badge {
+  background: linear-gradient(135deg,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.25) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.1) 100%);
+  border-color: rgba(var(--accent-rgb, 100, 150, 200), 0.4);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(var(--accent-rgb, 100, 150, 200), 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.timeline-item:hover .date-badge::before {
+  height: 1.2rem;
+  background: linear-gradient(180deg,
+    var(--accent-color) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.6) 100%);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb, 100, 150, 200), 0.6);
 }
 
 /* 卡片样式 */

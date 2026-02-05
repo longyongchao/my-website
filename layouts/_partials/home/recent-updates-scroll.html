@@ -2,10 +2,25 @@
 {{ if $updatesPage }}
 {{ $timeline := $updatesPage.Params.timeline }}
 {{ if $timeline }}
+{{/* 按日期降序排序，取最新的3条 */}}
+{{ $sortedTimeline := sort $timeline "date" "desc" }}
+
+<!-- 全局背景层 -->
+<div class="global-bg-container">
+  <div class="global-bg-image"></div>
+  <div class="global-bg-overlay"></div>
+</div>
+
 <div class="scroll-updates">
-  {{ range first 3 $timeline }}
-  <a href="{{ $updatesPage.RelPermalink }}" class="update-card">
+  {{ range first 3 $sortedTimeline }}
+  {{ $imageFit := .image_fit | default "cover" }}
+  <a href="{{ $updatesPage.RelPermalink }}" class="update-card glass"
+     {{ if .images }}data-images="{{ range $i, $img := .images }}{{ if $i }},{{ end }}{{ $img }}{{ end }}"{{ end }}
+     data-image-fit="{{ $imageFit }}">
+    <!-- 发光效果层 -->
     <div class="update-glow"></div>
+
+    <!-- 内容层 -->
     <div class="update-content">
       <span class="update-date">{{ .date }}</span>
       <h3 class="update-title">{{ .title }}</h3>
@@ -29,6 +44,53 @@
 {{ end }}
 
 <style>
+/* ===== 全局背景层 ===== */
+.global-bg-container {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.global-bg-container.active {
+  opacity: 1;
+}
+
+.global-bg-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.1);
+  transition: transform 6s ease-out;
+}
+
+.global-bg-container.active .global-bg-image {
+  transform: scale(1);
+}
+
+/* 全局背景暗角 */
+.global-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: backdrop-filter 0.6s ease;
+}
+
+.global-bg-container.active .global-bg-overlay {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
 .scroll-updates {
   display: flex;
   flex-direction: column;
@@ -50,9 +112,55 @@
   color: inherit;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  isolation: isolate;
 }
 
+/* ===== 毛玻璃效果 ===== */
+.update-card.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.update-card.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 发光边框效果 */
+.update-card.glass::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border-radius: 21px;
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.update-card.glass:hover::after {
+  opacity: 1;
+}
+
+/* 原来的渐变遮罩（无图片时） */
 .update-card::before {
   content: '';
   position: absolute;
@@ -63,31 +171,133 @@
   background: linear-gradient(135deg, var(--accent-color) 0%, transparent 50%);
   opacity: 0;
   transition: opacity 0.4s ease;
-}
-
-.update-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  border-color: var(--accent-color);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+  z-index: -1;
 }
 
 .update-card:hover::before {
-  opacity: 0.05;
+  opacity: 0.08;
 }
 
+/* 发光效果 */
+.update-glow {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    135deg,
+    var(--accent-color) 0%,
+    transparent 50%,
+    var(--accent-color) 100%
+  );
+  border-radius: 22px;
+  opacity: 0;
+  filter: blur(20px);
+  transform: scale(0.95);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.update-card:hover .update-glow {
+  opacity: 0.4;
+  transform: scale(1);
+}
+
+.update-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* 全局背景激活时，增强卡片毛玻璃效果 */
+.global-bg-container.active ~ .scroll-updates .update-card {
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+}
+
+.global-bg-container.active ~ .scroll-updates .update-card:hover {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* 内容层 */
 .update-content {
   flex: 1;
   position: relative;
-  z-index: 1;
+  z-index: 10;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.update-card:hover .update-content {
+  transform: translateY(-2px);
 }
 
 .update-date {
-  display: inline-block;
-  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: var(--accent-color);
+  color: var(--fg-color);
   margin-bottom: 0.8rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.15) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.05) 100%);
+  border-radius: 8px;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(var(--accent-rgb, 100, 150, 200), 0.2);
+  position: relative;
+  z-index: 2;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+}
+
+/* 左侧装饰线 */
+.update-date::before {
+  content: '';
+  width: 3px;
+  height: 1rem;
+  background: linear-gradient(180deg,
+    var(--accent-color) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.4) 100%);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.update-card:hover .update-date {
+  background: linear-gradient(135deg,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.25) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.1) 100%);
+  border-color: rgba(var(--accent-rgb, 100, 150, 200), 0.4);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(var(--accent-rgb, 100, 150, 200), 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.update-card:hover .update-date::before {
+  height: 1.2rem;
+  background: linear-gradient(180deg,
+    var(--accent-color) 0%,
+    rgba(var(--accent-rgb, 100, 150, 200), 0.6) 100%);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb, 100, 150, 200), 0.6);
+}
+
+/* 确保有背景图片时日期标签依然清晰可见 */
+.update-card[data-images]:hover .update-date,
+.global-bg-container.active ~ .scroll-updates .update-card:hover .update-date {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 100%);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
 }
 
 .update-title {
@@ -96,6 +306,15 @@
   margin: 0 0 0.8rem 0;
   color: var(--fg-color);
   line-height: 1.3;
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.update-card:hover .update-title {
+  color: #fff;
+  text-shadow: 
+    0 2px 20px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(0, 0, 0, 0.4);
 }
 
 .update-desc {
@@ -103,6 +322,12 @@
   color: var(--fg-color-muted);
   margin: 0 0 1rem 0;
   line-height: 1.6;
+  transition: all 0.3s ease;
+}
+
+.update-card:hover .update-desc {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .update-tags {
@@ -118,6 +343,15 @@
   font-size: 1.1rem;
   color: var(--fg-color-muted);
   font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.update-card:hover .update-tags .tag {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 .update-arrow {
@@ -126,12 +360,15 @@
   opacity: 0;
   transform: translateX(-10px);
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .update-card:hover .update-arrow {
   opacity: 1;
   transform: translateX(0);
-  color: var(--accent-color);
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 .section-link {
@@ -148,21 +385,132 @@
   transform: translateX(8px);
 }
 
+/* 响应式优化 */
 @media (max-width: 768px) {
   .update-card {
     padding: 1.5rem;
   }
-  
+
+  .update-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+
+  /* 移动端全局背景调整 */
+  .global-bg-image {
+    background-position: center;
+  }
+
   .update-title {
     font-size: 1.5rem;
   }
-  
+
   .update-desc {
     font-size: 1.3rem;
   }
-  
+
   .update-arrow {
     display: none;
   }
+
+  /* 移动端减弱毛玻璃效果 */
+  .update-card.glass {
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+  }
+}
+
+/* 减少动画偏好支持 */
+@media (prefers-reduced-motion: reduce) {
+  .global-bg-container,
+  .global-bg-image,
+  .update-glow,
+  .update-content {
+    transition: none !important;
+  }
+
+  .global-bg-container.active {
+    opacity: 0.9;
+  }
 }
 </style>
+
+<script>
+// 全局背景控制
+(function() {
+  const bgContainer = document.querySelector('.global-bg-container');
+  const bgImage = document.querySelector('.global-bg-image');
+  const cards = document.querySelectorAll('.update-card[data-images]');
+  let currentCard = null;
+  let rafId = null;
+  let isHovering = false;
+
+  // 预加载图片
+  function preloadImage(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(url);
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  // 设置背景图片
+  function setBackgroundImage(url) {
+    if (bgImage) {
+      bgImage.style.backgroundImage = `url(${url})`;
+    }
+  }
+
+  cards.forEach(card => {
+    const imagesAttr = card.getAttribute('data-images');
+    const imageFit = card.getAttribute('data-image-fit') || 'cover';
+
+    if (!imagesAttr) return;
+
+    const images = imagesAttr.split(',').map(s => s.trim()).filter(s => s);
+    const primaryImage = images[0]; // 使用第一张图片作为全局背景
+
+    // 鼠标进入卡片
+    card.addEventListener('mouseenter', () => {
+      isHovering = true;
+      currentCard = card;
+
+      // 预加载图片后显示
+      preloadImage(primaryImage).then(() => {
+        if (isHovering && currentCard === card) {
+          setBackgroundImage(primaryImage);
+          bgContainer?.classList.add('active');
+
+          // 根据图片适配模式调整背景尺寸
+          if (imageFit === 'contain') {
+            bgImage.style.backgroundSize = 'contain';
+            bgImage.style.backgroundRepeat = 'no-repeat';
+            bgImage.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+          } else {
+            bgImage.style.backgroundSize = 'cover';
+            bgImage.style.backgroundRepeat = 'no-repeat';
+            bgImage.style.backgroundColor = 'transparent';
+          }
+        }
+      }).catch(() => {
+        // 图片加载失败，静默处理
+      });
+    });
+
+    // 鼠标离开卡片
+    card.addEventListener('mouseleave', () => {
+      isHovering = false;
+      currentCard = null;
+
+      // 延迟隐藏，避免快速切换时的闪烁
+      setTimeout(() => {
+        if (!isHovering) {
+          bgContainer?.classList.remove('active');
+        }
+      }, 100);
+
+      if (rafId) cancelAnimationFrame(rafId);
+    });
+  });
+})();
+</script>
